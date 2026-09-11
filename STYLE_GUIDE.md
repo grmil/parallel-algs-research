@@ -1,14 +1,7 @@
 # [Project Name] C++ Style Guide
 
 Adapted from the [LLVM Coding Standards](https://llvm.org/docs/CodingStandards.html),
-trimmed to what's relevant for a two-person numerical library and simplified
-where LLVM's rules exist for compiler-specific reasons that don't apply here.
-
-I made a call on the two open questions from our earlier discussion
-(exceptions/RTTI, naming convention) so there's something concrete to start
-from — **both are flagged below and easy to change** if you and your
-collaborator want something different. Change this file, don't just diverge
-from it in practice.
+trimmed to what's relevant for this project.
 
 ---
 
@@ -22,8 +15,8 @@ any individual rule. Open a PR to fix the style itself rather than drifting.
 
 - **C++17.** No compiler-specific extensions.
 - No RTTI/exceptions restriction — *unlike LLVM.* LLVM bans these for compiler
-  binary-size reasons that don't apply to us.
-  - **Default (change if you disagree):** use exceptions for unrecoverable
+  binary-size reasons that don't apply to this project.
+  - **Default:**use exceptions for unrecoverable
     error conditions (e.g. dimension mismatch in matrix multiply, singular
     matrix in a solve). Use `assert` for programmer-error conditions that
     should never happen in correct code (see §7).
@@ -43,8 +36,7 @@ any individual rule. Open a PR to fix the style itself rather than drifting.
 
 ## 4. Naming Conventions
 
-**Default (change if you disagree) — simpler than LLVM's, closer to common
-C++ practice:**
+**Default — simpler than LLVM's, closer to common C++ practice:**
 
 | Kind | Convention | Example |
 |---|---|---|
@@ -101,7 +93,7 @@ Each group sorted alphabetically, separated by a blank line.
 - Never silently ignore an error condition. If a function can fail, its
   return type or its documented exceptions should say so.
 
-## 8. General Practices (kept from LLVM, apply cleanly here)
+## 8. General Practices (kept from LLVM)
 
 - Prefer `static_cast`/`const_cast`/`reinterpret_cast` over C-style casts.
 - Never `using namespace std;` in a header. Fine in a `.cpp` file for our own
@@ -116,10 +108,7 @@ Each group sorted alphabetically, separated by a blank line.
 - Every header should compile on its own (include everything it uses;
   don't rely on include order from other files).
 
-## 9. Things LLVM's Guide Covers That We're Dropping
-
-Not relevant to a small numerical library — mentioned so it's clear this was
-a deliberate cut, not an oversight:
+## 9. Things LLVM's Guide Covers That This Project Dropping
 
 - Preferring LLVM's own container library (`SmallVector`, etc.) over the STL
   — we just use `std::` / whatever numerical library we adopt in Phase 4.
