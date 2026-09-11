@@ -1,0 +1,92 @@
+# .clang-tidy for [Project Name]
+# Two jobs: (1) a conservative static-analysis check set to catch real bugs,
+# (2) enforcement of the naming conventions in STYLE_GUIDE.md §4, which
+# .clang-format can't do on its own.
+#
+# Usage:
+#   clang-tidy path/to/file.cpp -- -std=c++17 -Iinclude   # check one file
+#   clang-tidy --fix path/to/file.cpp -- -std=c++17       # auto-fix what it can
+# In CI: run without --fix and fail the build on any warning. Auto-fixing is
+# handy locally but should be reviewed before committing, not applied blindly
+# to someone else's code.
+#
+# Start conservative and expand the check list over time rather than turning
+# everything on at once — a huge wall of warnings on day one just gets
+# ignored.
+
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  readability-*,
+  cppcoreguidelines-slicing,
+  cppcoreguidelines-special-member-functions,
+  clang-analyzer-*,
+  -modernize-use-trailing-return-type,
+  -readability-magic-numbers,
+  -readability-uppercase-literal-suffix
+
+# Explanations for the disabled ones above:
+#   modernize-use-trailing-return-type: style preference, not a correctness
+#     issue - trailing return types (auto f() -> int) are fine but not
+#     required; don't want churn on every function signature.
+#   readability-magic-numbers: too noisy for numerical code, where literal
+#     constants (tolerances, dimensions in tests, etc.) are the norm.
+#   readability-uppercase-literal-suffix: purely cosmetic (1.0f vs 1.0F),
+#     not worth enforcing.
+
+WarningsAsErrors: ''
+HeaderFilterRegex: '.*'
+FormatStyle: file
+
+CheckOptions:
+  # --- Naming (matches STYLE_GUIDE.md §4) ---
+  - key: readability-identifier-naming.NamespaceCase
+    value: lower_case
+  - key: readability-identifier-naming.ClassCase
+    value: CamelCase
+  - key: readability-identifier-naming.StructCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumCase
+    value: CamelCase
+  - key: readability-identifier-naming.EnumConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.FunctionCase
+    value: camelBack
+  - key: readability-identifier-naming.MethodCase
+    value: camelBack
+  - key: readability-identifier-naming.VariableCase
+    value: camelBack
+  - key: readability-identifier-naming.ParameterCase
+    value: camelBack
+  - key: readability-identifier-naming.PrivateMemberCase
+    value: camelBack
+  - key: readability-identifier-naming.PrivateMemberSuffix
+    value: _
+  - key: readability-identifier-naming.ProtectedMemberCase
+    value: camelBack
+  - key: readability-identifier-naming.ProtectedMemberSuffix
+    value: _
+  - key: readability-identifier-naming.PublicMemberCase
+    value: camelBack
+  - key: readability-identifier-naming.ConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConstantPrefix
+    value: k
+  - key: readability-identifier-naming.GlobalConstantCase
+    value: CamelCase
+  - key: readability-identifier-naming.GlobalConstantPrefix
+    value: k
+  - key: readability-identifier-naming.ConstexprVariableCase
+    value: CamelCase
+  - key: readability-identifier-naming.ConstexprVariablePrefix
+    value: k
+  - key: readability-identifier-naming.TemplateParameterCase
+    value: CamelCase
+
+  # --- A couple of readability checks tuned to be less pedantic ---
+  - key: readability-function-cognitive-complexity.Threshold
+    value: 50
+  - key: modernize-use-nodiscard.ReplacementString
+    value: '[[nodiscard]]'

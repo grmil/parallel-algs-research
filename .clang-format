@@ -1,0 +1,56 @@
+# .clang-format for [Project Name]
+# Based on LLVM's default style (matches STYLE_GUIDE.md §3), with the
+# settings below made explicit rather than left implicit, so this file stays
+# readable as the single source of truth for formatting.
+#
+# Usage:
+#   clang-format -i path/to/file.cpp      # format one file in place
+#   clang-format -i src/**/*.cpp src/**/*.h  # format everything
+# Most editors (VS Code, CLion, Vim w/ plugin) will pick this file up
+# automatically and format-on-save if you enable that setting.
+
+BasedOnStyle: LLVM
+
+# --- Core layout (matches STYLE_GUIDE.md §3) ---
+ColumnLimit: 80
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+AccessModifierOffset: -2
+
+# --- Braces ---
+# Attach opening braces to the same line (LLVM default) rather than putting
+# them on their own line (Allman style) - keeps vertical space down.
+BreakBeforeBraces: Attach
+
+# --- Pointers/references ---
+# int* p, not int *p  -- attach to the type, not the variable name.
+PointerAlignment: Left
+ReferenceAlignment: Left
+
+# --- Includes ---
+# Matches STYLE_GUIDE.md §6 include ordering: own header, project headers,
+# third-party, then standard library. clang-format sorts alphabetically
+# *within* whatever groups you define here by regex; blank lines in your
+# #include block still create separate groups, so keep the blank lines
+# described in §6 and this will sort each group correctly.
+SortIncludes: true
+IncludeBlocks: Preserve
+
+# --- Misc readability ---
+AlignConsecutiveAssignments: false
+AlignConsecutiveDeclarations: false
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+BinPackArguments: true
+BinPackParameters: true
+SpaceBeforeParens: ControlStatements
+SpacesInAngles: false
+Cpp11BracedListStyle: true
+
+# --- Namespaces ---
+# Matches STYLE_GUIDE.md - don't indent inside namespace blocks; keeps
+# nesting shallow.
+NamespaceIndentation: None
+FixNamespaceComments: true
