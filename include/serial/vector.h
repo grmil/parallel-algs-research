@@ -86,6 +86,14 @@ public:
       data.pop_back();
       return value;
     }
+
+    bool empty() const {
+      return data.empty();   
+    }
+
+    void clear() {
+      data.clear();
+    }
 };
 
 // (vector, vector)
