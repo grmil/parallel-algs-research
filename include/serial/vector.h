@@ -1,3 +1,4 @@
+// TODO: Add docs for all of this
 #include <iostream>
 #include <vector>
 #include <stdexcept>
@@ -40,7 +41,7 @@ public:
         return result;
     }
 
-    // Compound assignment - vector, vector
+    // Compound assignment - (vector, vector)
     Vector<T>& operator+=(const Vector<T>& rhs) {
         checkSameSize(rhs);
         for (std::size_t i = 0; i < data.size(); ++i)
@@ -75,9 +76,19 @@ public:
             data[i] *= scalar;
         return *this;
     }
+
+    void append(T value) {
+      data.push_back(std::move(value));
+    }
+
+    T pop() {
+      T value = std::move(data.back());
+      data.pop_back();
+      return value;
+    }
 };
 
-// vector, vector
+// (vector, vector)
 template <typename T>
 Vector<T> operator+(Vector<T> a, const Vector<T>& b) {
     a += b;
@@ -102,7 +113,7 @@ Vector<T> operator/(Vector<T> a, const Vector<T>& b) {
     return a;
 }
 
-// vector, scalar and scalar, vector
+// (vector, scalar) and (scalar, vector)
 template <typename T>
 Vector<T> operator*(Vector<T> a, const T& scalar) {
     a *= scalar;
